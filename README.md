@@ -19,6 +19,7 @@ Required packages:
 * scipy
 * skimage
 * OpenCV (i.e. `cv2`)
+* imutils
 
 For installation, simply use `sudo pip install git+https://github.com/redzhepdx/vidaug.git`.
 Alternatively, the repository can be download via `git clone https://github.com/redzhepdx/vidaug.git` and installed by using `python setup.py sdist && pip install dist/vidaug-0.1.tar.gz`.

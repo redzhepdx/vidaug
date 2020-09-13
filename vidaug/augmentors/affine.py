@@ -21,6 +21,7 @@ import PIL
 import cv2
 import numpy as np
 import scipy
+import imutils
 
 
 class RandomRotate(object):
@@ -53,6 +54,44 @@ class RandomRotate(object):
             rotated = [scipy.ndimage.interpolation.rotate(img, angle) for img in clip]
         elif isinstance(clip[0], PIL.Image.Image):
             rotated = [img.rotate(angle) for img in clip]
+        else:
+            raise TypeError('Expected numpy.ndarray or PIL.Image' +
+                            'but got list of {0}'.format(type(clip[0])))
+
+        return rotated
+
+
+class RandomRotateBound(object):
+    """
+        Rotate video randomly by a random angle within given bound
+        without any information loss.
+
+        Args:
+            degrees (sequence or int): Range of degrees to randomly
+            select from. If degrees is a number instead of sequence
+            like (min, max), the range of degrees, will be
+            (-degrees, +degrees).
+        """
+
+    def __init__(self, degrees):
+        if isinstance(degrees, numbers.Number):
+            if degrees < 0:
+                raise ValueError('If degrees is a single number,'
+                                 'must be positive')
+            degrees = (-degrees, degrees)
+        else:
+            if len(degrees) != 2:
+                raise ValueError('If degrees is a sequence,'
+                                 'it must be of len 2.')
+
+        self.degrees = degrees
+
+    def __call__(self, clip):
+        angle = random.uniform(self.degrees[0], self.degrees[1])
+        if isinstance(clip[0], np.ndarray):
+            rotated = [imutils.rotate_bound(img, angle) for img in clip]
+        elif isinstance(clip[0], PIL.Image.Image):
+            rotated = [imutils.rotate_bound(img, angle) for img in clip]
         else:
             raise TypeError('Expected numpy.ndarray or PIL.Image' +
                             'but got list of {0}'.format(type(clip[0])))
