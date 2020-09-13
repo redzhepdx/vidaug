@@ -70,3 +70,4 @@ Salt                                |  ![Salt](videos/salt.gif?raw=true "Salt")
 Pepper                              |  ![Cropping](videos/pepper.gif?raw=true "Pepper")
 Shear                               |  ![Shear](videos/shear.gif?raw=true "Shear")
 
+Original Implementation : https://github.com/okankop/vidaug

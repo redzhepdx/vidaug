@@ -15,12 +15,9 @@ List of augmenters:
     * Salt
 """
 
-
-import numpy as np
-import random
 import PIL
+import numpy as np
 from PIL import ImageOps
-
 
 
 class InvertColor(object):
@@ -119,6 +116,7 @@ class Pepper(object):
         ratio (int): Determines number of black pixels on each frame of video.
         Smaller the ratio, higher the number of black pixels.
     """
+
     def __init__(self, ratio=100):
         self.ratio = ratio
 
@@ -140,6 +138,7 @@ class Pepper(object):
         else:
             return data_final
 
+
 class Salt(object):
     """
     Augmenter that sets a certain fraction of pixel intesities to 255, hence
@@ -149,6 +148,7 @@ class Salt(object):
         ratio (int): Determines number of white pixels on each frame of video.
         Smaller the ratio, higher the number of white pixels.
    """
+
     def __init__(self, ratio=100):
         self.ratio = ratio
 

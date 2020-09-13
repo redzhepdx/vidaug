@@ -17,8 +17,6 @@ List of augmenters:
 
 """
 
-import numpy as np
-import PIL
 import random
 
 

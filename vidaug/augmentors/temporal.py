@@ -18,11 +18,10 @@ List of augmenters:
     * TemporalElasticTransformation
 """
 
-import numpy as np
-import PIL
-import random
 import math
+import random
 
+import numpy as np
 
 
 class TemporalBeginCrop(object):
@@ -123,17 +122,18 @@ class Downsample(object):
     Args:
         ratio (float): Downsampling ratio in [0.0 <= ratio <= 1.0].
     """
-    def __init__(self , ratio=1.0):
+
+    def __init__(self, ratio=1.0):
         if ratio < 0.0 or ratio > 1.0:
             raise TypeError('ratio should be in [0.0 <= ratio <= 1.0]. ' +
                             'Please use upsampling for ratio > 1.0')
         self.ratio = ratio
 
     def __call__(self, clip):
-        nb_return_frame = np.floor(self.ratio * len(clip))
+        nb_return_frame = int(np.floor(self.ratio * len(clip)))
         return_ind = [int(i) for i in np.linspace(1, len(clip), num=nb_return_frame)]
 
-        return [clip[i-1] for i in return_ind]
+        return [clip[i - 1] for i in return_ind]
 
 
 class Upsample(object):
@@ -143,17 +143,18 @@ class Upsample(object):
     Args:
         ratio (float): Upsampling ratio in [1.0 < ratio < infinity].
     """
-    def __init__(self , ratio=1.0):
+
+    def __init__(self, ratio=1.0):
         if ratio < 1.0:
             raise TypeError('ratio should be 1.0 < ratio. ' +
                             'Please use downsampling for ratio <= 1.0')
         self.ratio = ratio
 
     def __call__(self, clip):
-        nb_return_frame = np.floor(self.ratio * len(clip))
+        nb_return_frame = int(np.floor(self.ratio * len(clip)))
         return_ind = [int(i) for i in np.linspace(1, len(clip), num=nb_return_frame)]
 
-        return [clip[i-1] for i in return_ind]
+        return [clip[i - 1] for i in return_ind]
 
 
 class TemporalFit(object):
@@ -164,6 +165,7 @@ class TemporalFit(object):
     Args:
         size (int): Frame size to fit the video.
     """
+
     def __init__(self, size):
         if size < 0:
             raise TypeError('size should be positive')
@@ -172,7 +174,7 @@ class TemporalFit(object):
     def __call__(self, clip):
         return_ind = [int(i) for i in np.linspace(1, len(clip), num=self.size)]
 
-        return [clip[i-1] for i in return_ind]
+        return [clip[i - 1] for i in return_ind]
 
 
 class TemporalElasticTransformation(object):

@@ -13,8 +13,8 @@ List of augmenters:
     * VerticalFlip
 """
 
-import numpy as np
 import PIL
+import numpy as np
 
 
 class HorizontalFlip(object):
@@ -30,7 +30,6 @@ class HorizontalFlip(object):
         else:
             raise TypeError('Expected numpy.ndarray or PIL.Image' +
                             ' but got list of {0}'.format(type(clip[0])))
-
 
 
 class VerticalFlip(object):

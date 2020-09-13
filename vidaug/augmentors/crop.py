@@ -14,10 +14,11 @@ List of augmenters:
     * RandomCrop
 """
 
-import numpy as np
-import PIL
 import numbers
 import random
+
+import PIL
+import numpy as np
 
 
 class CenterCrop(object):
@@ -27,6 +28,7 @@ class CenterCrop(object):
     Args:
         size (sequence or int): Desired output size for the crop in format (h, w).
     """
+
     def __init__(self, size):
         if isinstance(size, numbers.Number):
             if size < 0:
@@ -107,7 +109,7 @@ class CornerCrop(object):
                             'but got list of {0}'.format(type(clip[0])))
 
         if self.randomize:
-            self.crop_position = self.crop_positions[random.randint(0,len(self.crop_positions) - 1)]
+            self.crop_position = self.crop_positions[random.randint(0, len(self.crop_positions) - 1)]
 
         if self.crop_position == 'c':
             th, tw = (self.size, self.size)

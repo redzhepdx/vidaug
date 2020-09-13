@@ -14,12 +14,13 @@ List of augmenters:
     * RandomShear
 """
 
-import numpy as np
 import numbers
 import random
-import scipy
+
 import PIL
 import cv2
+import numpy as np
+import scipy
 
 
 class RandomRotate(object):
@@ -49,7 +50,7 @@ class RandomRotate(object):
     def __call__(self, clip):
         angle = random.uniform(self.degrees[0], self.degrees[1])
         if isinstance(clip[0], np.ndarray):
-            rotated = [scipy.misc.imrotate(img, angle) for img in clip]
+            rotated = [scipy.ndimage.interpolation.rotate(img, angle) for img in clip]
         elif isinstance(clip[0], PIL.Image.Image):
             rotated = [img.rotate(angle) for img in clip]
         else:
@@ -88,7 +89,7 @@ class RandomResize(object):
         new_h = int(im_h * scaling_factor)
         new_size = (new_h, new_w)
         if isinstance(clip[0], np.ndarray):
-            return [scipy.misc.imresize(img, size=(new_h, new_w),interp=self.interpolation) for img in clip]
+            return [scipy.misc.imresize(img, size=(new_h, new_w), interp=self.interpolation) for img in clip]
         elif isinstance(clip[0], PIL.Image.Image):
             return [img.resize(size=(new_w, new_h), resample=self._get_PIL_interp(self.interpolation)) for img in clip]
         else:
@@ -167,4 +168,4 @@ class RandomShear(object):
             return [img.transform(img.size, PIL.Image.AFFINE, (1, x_shear, 0, y_shear, 1, 0)) for img in clip]
         else:
             raise TypeError('Expected numpy.ndarray or PIL.Image' +
-                                'but got list of {0}'.format(type(clip[0])))
+                            'but got list of {0}'.format(type(clip[0])))

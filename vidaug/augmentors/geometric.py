@@ -14,13 +14,11 @@ List of augmenters:
     * Superpixel
 """
 
-from skimage import segmentation, measure
-import numpy as np
-import random
-import numbers
-import scipy
 import PIL
 import cv2
+import numpy as np
+import scipy
+from skimage import segmentation, measure
 
 
 class GaussianBlur(object):
@@ -78,6 +76,7 @@ class ElasticTransformation(object):
         May take the same values as in `scipy.ndimage.map_coordinates`,
         i.e. "constant", "nearest", "reflect" or "wrap".
     """
+
     def __init__(self, alpha=0, sigma=0, order=3, cval=0, mode="constant",
                  name=None, deterministic=False):
         self.alpha = alpha
@@ -112,15 +111,15 @@ class ElasticTransformation(object):
             return result
 
     def _generate_indices(self, shape, alpha, sigma):
-        assert (len(shape) == 2),"shape: Should be of size 2!"
+        assert (len(shape) == 2), "shape: Should be of size 2!"
         dx = scipy.ndimage.gaussian_filter((np.random.rand(*shape) * 2 - 1), sigma, mode="constant", cval=0) * alpha
         dy = scipy.ndimage.gaussian_filter((np.random.rand(*shape) * 2 - 1), sigma, mode="constant", cval=0) * alpha
 
         x, y = np.meshgrid(np.arange(shape[0]), np.arange(shape[1]), indexing='ij')
-        return np.reshape(x+dx, (-1, 1)), np.reshape(y+dy, (-1, 1))
+        return np.reshape(x + dx, (-1, 1)), np.reshape(y + dy, (-1, 1))
 
     def _map_coordinates(self, image, indices_x, indices_y, order=1, cval=0, mode="constant"):
-        assert (len(image.shape) == 3),"image.shape: Should be of size 3!"
+        assert (len(image.shape) == 3), "image.shape: Should be of size 3!"
         result = np.copy(image)
         height, width = image.shape[0:2]
         for c in range(image.shape[2]):
@@ -136,7 +135,6 @@ class ElasticTransformation(object):
         return result
 
 
-
 class PiecewiseAffineTransform(object):
     """
     Augmenter that places a regular grid of points on an image and randomly
@@ -149,6 +147,7 @@ class PiecewiseAffineTransform(object):
 
          displacement_magnification (float): it magnify the image
     """
+
     def __init__(self, displacement=0, displacement_kernel=0, displacement_magnification=0):
         self.displacement = displacement
         self.displacement_kernel = displacement_kernel
@@ -180,10 +179,12 @@ class PiecewiseAffineTransform(object):
         displacement_map_cols = np.clip(displacement_map_cols, 0, image_w - 1)
 
         if isinstance(clip[0], np.ndarray):
-            return [img[(displacement_map_rows.flatten(), displacement_map_cols.flatten())].reshape(img.shape) for img in clip]
+            return [img[(displacement_map_rows.flatten(), displacement_map_cols.flatten())].reshape(img.shape) for img
+                    in clip]
         elif isinstance(clip[0], PIL.Image.Image):
-            return [PIL.Image.fromarray(np.asarray(img)[(displacement_map_rows.flatten(), displacement_map_cols.flatten())].reshape(np.asarray(img).shape)) for img in clip]
-
+            return [PIL.Image.fromarray(
+                np.asarray(img)[(displacement_map_rows.flatten(), displacement_map_cols.flatten())].reshape(
+                    np.asarray(img).shape)) for img in clip]
 
 
 class Superpixel(object):
@@ -206,7 +207,6 @@ class Superpixel(object):
         self.p_replace = p_replace
         self.n_segments = n_segments
         self.interpolation = interpolation
-
 
     def __call__(self, clip):
         is_PIL = isinstance(clip[0], PIL.Image.Image)
@@ -247,4 +247,3 @@ class Superpixel(object):
                     image_sp_c[segments == ridx] = mean_intensity
 
         return image_sp
-
